@@ -11,6 +11,7 @@ Due to the highly volatile nature of stocks which depends on diverse political a
 #### **Part 1: Research Proposal**
 
 **Statement of the Problem**
+
 Apple Inc. (AAPL) is the world’s largest multinational technology company specializing in electronics and software. AAPL first went public in 1980 through Nasdaq and in March 2015. In August 2018, Apple became the first publicly traded U.S. company valued at over $1 trillion and two years later, the first $2 trillion valued company. The company’s stock price is evident in its success and conveys an immense pool of fascinating data. AAPL’s ticker symbol represents the most-watched stock globally and is based on market capitalization - one of the largest companies in the world.
 
 Predicting the AAPL stock price and its trends are highly volatile. Hence, researchers are constantly studying to capture the volatility and predict its next moves. Investors and market analysts study the market behavior and plan their buy or sell strategies accordingly.
