@@ -1,0 +1,344 @@
+---
+title: "Project Proposal -  Apple Stock: The impact of news sentiments on a daily closing price of shares" 
+author:  "Group 5 (Jiajun Du, Nate Lim, Romauli Butarbutar, Victoriya Murga)"
+output:
+  html_document: 
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment="", warning = FALSE, message = FALSE, tidy.opts=list(width.cutoff=55), tidy = TRUE)
+library(pwr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(data.table)
+library(DT)
+
+```
+
+# Executive Summary / Abstract
+Due to the highly volatile nature of stocks which depends on diverse political and economic factors, political factors, investor sentiment, and many other factors, predicting stock market prices is hard and encourages interest among both analysts and researchers for a long time. Recent studies in sentiment analysis have shown that there is a strong correlation between the movement of stock prices and the publication of news articles. Investors' opinions towards financial markets have been affected by the vast amount of online information in the public domain, such as Wikipedia usage patterns, news stories from the mainstream media, and social media. As such, there is a need to analyze the effects of news sentiments on the stock price. Our project proposal would use non-quantifiable data, from social media news, namely tweets about the Apple stock, to predict its future stock trend with sentiment analysis. We assume that Tweets impact the stock market, we would study the relationship between tweets and stock trends. We will retrieve, extract, and analyze the effects of news sentiments on the Apple stock price in the market, developing a dictionary-based sentiment analysis model, and evaluating the model for gauging the effects of news sentiments on the Apple stock.
+
+
+
+# Part 1: Research Proposal
+
+## Statement of the Problem
+
+Apple Inc. (AAPL) is the world's largest multinational technology company specializing in electronics and software. AAPL first went public in 1980 through Nasdaq and in March 2015. In August 2018, Apple became the first publicly traded U.S. company valued at over $1 trillion and two years later, the first $2 trillion valued company. The company's stock price is evident in its success and conveys an immense pool of fascinating data. AAPL's ticker symbol represents the most-watched stock globally and is based on market capitalization -  one of the largest companies in the world. 
+
+Predicting the AAPL stock price and its trends are highly volatile. Hence, researchers are constantly studying to capture the volatility and predict its next moves. Investors and market analysts study the market behavior and plan their buy or sell strategies accordingly. 
+
+Market sentiments witness different types of patterns with time, namely bullish, bearish and symmetric patterns. While a bullish or a bearish run may be an imperative consequence of an economic or geo-political vital event and therefore may be of short duration, a symmetric pattern is perceived to be the rule of vibrant economic activity, investor sentiment. 
+
+There are two main methods for forecasting market trends through sentiment analysis. One is technical analysis, and the other is fundamental analysis. Technical analysis considers past prices and volume to predict the future trend, while fundamental analysis involves analyzing its financial data to predict insights. Our research pursues the fundamental analysis technique to discover the future trend of AAPL stock by considering social media news such as tweets as the primary information and classifying it into positive and negative sentiments. If the tweet sentiment is positive, it is more likely that the stock price will increase, and if the news sentiment is negative, then the stock price may likely decrease. We aim to build a model that predicts tweet polarity, affecting stock trends through supervised machine learning as classification and other text mining techniques to examine news polarity. We have taken the past two years of tweets and stock prices from Apple as data for our analysis.
+
+
+## Research Question and Hypotheses
+
+### Research Question
+ 
+Before outlining our hypotheses and research process, we want to explain the question we are targeting.
+
+From $42.31 at the end of 2017 to $124.28 currently, which is a dramatic increase of 193.8%. Apple's stock price is sensitive to investor sentiment indicator changes.  
+Contingent on the aforementioned reasons, the primary research question that we would like to address is:
+
+> *Does a positive news sentiments increase the daily closing price of Apple stock?*
+
+### Hypotheses
+
+#### Null Hypothesis With Mathematical Notation
+
+In 2020 the increment of the Apple (NASDAQ: AAPL) stock was a little more than  60% (Forbes, 2020). 
+Of course, Apple’s Services business is a big driver of its value, but it would be interesting to examine whether news sentiments will have a significant effect on the price of its stock. 
+
+Therefore, we propose the following null hypothesis:
+
+> News sentiment indicators **do not** have any incremental effect over the average price of Apple stock.
+
+In mathematical notation, the null hypothesis is given as:
+$$ H_0: SI_{avg,Δ\%} - ST_{avg,Δ\%} \leqslant 0, $$
+
+
+where $SI_{avg,Δ\%}$ is News sentiment indicators percentage change and $SI_{avg,Δ\%}$ is Stock price percentage change.
+
+#### Alternative Hypothesis With Mathematical Notation
+
+Correspondingly, the alternative hypothesis would be:
+
+> News sentiment indicators **have an incremental effect** over the average price of Apple stock.
+
+The mathematical notation of the alternative hypothesis is:
+
+$$ H_1: SI_{avg,Δ\%} - ST_{avg,Δ\%} > 0 $$
+
+## Literature Review
+
+Multiple studies deal with stock return volatility from an investor's perspective. Researchers have preferred to use the terminology investor sentiment rather than the "market sentiment" for most of these studies. For the sake of completeness, we outline a few of these. Within the scope of behavioral finance, many studies have analyzed factors relating to investors' mentality, chief among others being trends. Being an intelligent investor means being patient, disciplined, and eager to learn; you must also be able to harness your emotions and think for yourself. This kind of intelligence, explains Graham (2005), "is a trait more of the character than of the brain.", meaning - highly subjective to outside influence. 
+
+Grossman and Stiglitz (1980) developed a model under asymmetric information. There are two types of rational investors: informed investors who acquire private information at a cost and uninformed investors who extract private information freely from the price. They demonstrate that it is impossible to achieve informationally eﬃcient markets. Their result depends critically on the assumption that private information is costly. Let us assume, news articles and stock prices are related to each other. Kalyani and Bharathi (2019) suggest that news may have the capacity to fluctuate stock trends. So, we thoroughly studied this relationship and concluded that stock trends could be predicted using news articles and previous price history.
+
+Apple Inc (Apple) designs, manufactures and markets mobile communication and media devices, personal computers (PCs), portable and wearable devices. We are also offering - software, accessories, networking solutions, and third-party digital content. The company reported revenues of (US Dollars) US$274,515 million for the fiscal year ended September 2020 (FY2020), an increase of 5.5% over FY2019.  Apple stock is weighted at 2.408669 within the Dow Jones index (Gondo, 2021). 
+
+By referring to statista.com, we found that as of December 2020, 20.4 percent of Apple's stock is held by Millennials in the United States. Millennials, also known as Generation Y, account for over 20 percent of the U.S. population. Social media and knowledge of financial markets for a substantial living - are more popular than ever. Unless Apple Inc understands the customers' requirements and adapts to emerging technologies in the market, and introduces new products and services, its business could be affected.
+
+
+**What is market sentiment?** 
+Market sentiment refers to the overall attitude of investors toward a marketable security or the financial market. It is the feeling of a market revealed through the price movement of the securities traded in that market. In general, rising prices indicate bullish market sentiment, while falling prices indicate bearish market sentiment. Any indicator an investor can use to gain sentiment insight into the stock market’s mood. Extreme readings given by these indicators can indicate impending reversals. The following are sentiment indicators that traders and analysts may use:
+
+**CBOE Volatility Index (VIX)**
+Investors often view this indicator as the "fear index" because it spikes when someone purchases a significant amount of put options to protect their portfolios. Investors who buy put options believe the price of the underlying stock will fall. If the VIX spikes, it indicates fear within the market.
+
+**New York Stock Exchange (NYSE) High/Low Indicator**
+Investors can keep track of this indicator to compare stocks making new 52-week highs relative to stocks making new 52-week lows. Spikes in either direction often show extreme bullish or bearish sentiment. Contrarian investors might use this sentiment indicator to buy quality stocks during periods of severe pessimism.
+
+**NYSE 200-day Moving Average**
+This indicator shows how many stocks are trading above their long-term moving average and is expressed as a percentage. For example, if the indicator is rising and shows that over 60% of stocks are trading above their 200-day moving averages, it indicates a broad bullish sentiment. A reading over 80% suggests stocks may be overbought.
+
+**Odd-Lot Trading Statistics**
+This indicator measures the number of shares being bought and sold in odd lots, which is less than 100 shares for most stocks. The theory behind this sentiment indicator is that retail investors, who typically have the least amount of money are likely to buy and sell odd lots, buy when bullish sentiment has peaked, and sell when bearish sentiment reaches a climax. Therefore, when odd-lot trading increases during market extremes, savvy investors may take a position in the opposite direction.
+
+**The Commitment of Traders Report**
+This weekly report shows the aggregate positioning of different groups of traders in the futures markets. A rising speculative position indicates a rise in that asset's price. When speculative interest hits an extreme, though, it indicates prices could head the other way.
+
+**Social Media**
+Companies such as Facebook and Twitter are now very influential in the financial market. In fact, they are occasionally more useful for traders than the traditional media channels such as Wall Street Journal and Financial Times. As a sentiment trader, you may want  to constantly be on the lookout for what is happening in social media.
+
+**Natural Language Processing (NLP) techniques**
+Refer to Nagar and Hahsler in their research [1] presented an automated text mining based approach to aggregate news stories from various sources and create a News Corpus. The Corpus is filtered down to relevant sentences and analyzed using Natural Language Processing (NLP) techniques. A sentiment metric, called NewsSentiment, utilizing the count of positive and negative polarity words is proposed as a measure of the sentiment of the overall news corpus. They have used various open source packages and tools to develop the news collection and aggregation engine as well as the sentiment evaluation engine. They also state that the time variation of NewsSentiment shows a very strong correlation with the actual stock price movement.
+
+**Text mining based framework**
+Yu et al [2] present a text mining based framework to determine the sentiment of news articles and illustrate its impact on energy demand. News sentiment is quantified and then presented as a time series and compared with fluctuations in energy demand and prices.
+
+
+### Data Collection
+
+* **Describing the Data**: We will be exploring two sets of data for our analysis. The first dataset will consist of tweets with a consolidation of emotions such as happiness, frustration, anger, sadness from twitter, cross-referencing this data with another dataset from yahoo finance on the daily  closing price of Apple stock. 
+
+Our sentiment analysis will be a lexicon-based approach where we represent each review as a bag of words. We will then assign sentiment values from the dictionary to all positive and negative words or phrases within the message. A combining function, such as sum or average, will be applied to the final prediction, which enables us to assess the overall sentiment of the review.
+
+
+
+* **Preparing the Data**: We will preparing the data for analysis which may include imputing missing values, recording variables, creating new variables, extracting new features, and restructuring the data. We will analyze the data to address the research questions.
+
+* **Data sources**
+  Data could be in different formats or reside in various locations.
+  We collect the data from:
+  - Kaggle 
+  - Yahoo Finance
+    We will use the APPL stokc price from 2018
+  - Tweets about the Top Companies from 2015 to 2020
+
+* **Variables to include in our analysis**
+    In our analysis, we will only use variables post_date, cleaned_data from data.csv dataset containing tweets from the company. Variables     such as number of comments, likes, and retweets do not play an important role in our analysis. However, a more sophisticated analysis       might depend on these variables as they reflect the quality of the tweets.
+
+* **Determine whether to use derived variables**
+    We will not use derived variables since we are conducting natural language processing and sentiment analysis on tweets. 
+
+* **The quality of our data**
+    The data is not complete because the tweets about the companies do not capture the entire market sentiment. However, the data is            sufficient to provide a general feeling of the market about certain stocks. The original dataset contains all the tweets about our          interested company from 2015 to 2020. We will only take data in the year 2018. The dataset does not contain missing values but has raw      form of texts that need further cleaning. We will use natural language processing libraries to remove stopwords, url, and punctuation       etc. 
+
+    The accuracy of the model’s predictions is directly related to the variables we select and the quality of our data, so we would complete     the data along with our analysis progress. We also will conduct a statistical test to find out the outliers, do the data cleansing and      fill the missing value.
+
+### Variables
+
+* **Independent variable**: The independent variable is the News Sentiment Indicators.
+
+* **Dependent variable**: The dependent variable is the average price of Apple stock
+
+
+# Part 2: The steps of data analysis {.tabset}
+
+We propose to perform 3 phase system designs in this project to classify news articles for generating stock trend.
+1. Analyze and Scoring news articles
+   This process including news collection, text preprocessing, news articles with its polarity score 
+2. Classify the news articles
+3. Checking for relationship between news articles and APPL stock price data.
+
+1.1. News Collection
+
+We collected data from Tweets about the Top Companies from 2015 to 2020. This dataset contains over 3 million unique tweets with their information such as tweet id, author of the tweet, post date, the text body of the tweet, and the number of comments, likes, and retweets of tweets matched with the related companies Amazon, Apple, Google, Microsoft, and Tesla. 
+We also collected Apple price data for one year, from 1 Jan 2018 to 31 December 2018. Daily stock prices contain seven values as Open, High, Low,Close, Adjusted Close, Volume and Date. For integrity throughout the project, we considered Adjusted Close price as everyday stock price. We have collected this data from major news aggregators such as finance.yahoo.com.
+
+
+1.2. Pre Processing
+
+As text data is unstructured data, we cannot provide raw test data to classifier as an input, so we need to tokenize the santences into words to operate on word level. Text data contains more noisy words which are not contributing towards classification. So, we need to
+drop those words. In addition, text data may contain numbers, more white spaces, tabs, punctuation characters, stop words etc. We also need to clean data by removing all those words. We removed HTML tags from textual data. In order to capture the context effectively from news articles, we extracted five sentences surrounding the name of the company in articles in which the name of the company appeared. For articles only containing the name of the company in the title, we considered the whole article.
+
+For stock prices, we explored the data to check for the presence of duplicate records and null values and did not find any. We applied a log transformation on the stock prices to reduce the difference between high and low stock prices. We also used differencing to transform the stock price series into a stationary series of price changes. 
+
+## Preliminary Code
+
+This section of the report is reserved for any work of our plan to do ahead of answering the questions -- such as loading or exploring the data.
+
+```{r read_data}
+#clear memory
+rm(list=ls())
+
+# _Read Data for APPL Price----
+applPriceData = read.csv('AAPL 2018.csv',stringsAsFactors = F)
+str(applPriceData)
+head(applPriceData)
+
+
+```
+
+
+## Data Wranngling, Cleaning and Tidying
+
+**Visualizing Data**
+Visualizing data can aid in forming an understanding of the data, identifying trends, and spotting anomalies.
+
+```{r outlier , echo=FALSE}
+# ***Examine outliers with stocks volume----
+library(ggplot2) 
+ggplot(data=applPriceData,aes(x='',y=Volume))+
+  geom_boxplot(outlier.color='red',outlier.alpha=0.5, fill='cadetblue')+ 
+  geom_text(aes(x='',y=median(Volume),label=median(Volume)),size=3,hjust=11)+
+  xlab(label = '')
+
+
+```
+
+**Missing and Parsing Data**
+One of the issues is variables not being in the correct format, in this case including:
+*-* date :  type is character, need to change to date class
+*-* .... : logical with NA?
+*-* .... : chr  "f" should be factor?
+*-* ..... : data type integers   but so many NA value, we need to clean the data
+*-* blank data in several significant data like beds, square_feet. For other blank data will be ignored in this analysis
+
+```{r data_cleaning APPL Price Dat}
+# STEP 1 DATA CLEANING, WRANGLING, TIDYING FOR APPL Price Data
+
+#Reformat data, convert data type 
+library("tidyverse")
+library(dplyr)
+
+#Reformat Date Class
+applPriceData$Date = as.Date(applPriceData$Date)
+
+#check blank data and impute missing value
+blank_data = colSums(is.na(applPriceData))
+blank_data[blank_data > 0]
+
+# #applPriceData
+# for (i in 1:ncol(applPriceData)) {
+#   if (is.numeric(applPriceData[,i])) {
+#     applPriceData[is.na(applPriceData[,i]), i] = mean(applPriceData[,i], na.rm = TRUE)
+#   }
+#   if (is.factor(applPriceData[,i])) {
+#     applPriceData[,i] = addNA(applPriceData[,i])
+#   }
+# }
+
+# colSums(is.na(test))
+sum(is.na(applPriceData$summary))
+
+```
+```{r data_cleaning News Data}
+# STEP 1 DATA CLEANING, WRANGLING, TIDYING FOR NEWS DATA
+ library(mice)
+ library(ISLR)
+ library(caret)
+ library(caTools)
+ library(dplyr)
+ library(ggplot2)
+ library(tidyverse)
+ library(lubridate)
+ library(tm); library(SnowballC); library(magrittr)
+# #setwd('/Users/davedu/Desktop/Columbia')
+ 
+ company_tweets = read.csv('company_tweets.csv',stringsAsFactors = F)
+ str(company_tweets)
+ tweets = read.csv('tweets.csv',stringsAsFactors = F)
+ str(tweets)
+ tweets = merge(company_tweets, tweets, by = 'tweet_id')
+ str(tweets)
+ 
+ df = tweets %>%
+   filter(ticker_symbol == 'AAPL') %>%
+   select(c(tweet_id, post_date, body))
+ 
+ 
+ df$post_date = as_datetime(df$post_date)
+ 
+ str(df)
+ 
+ 
+ corpus = Corpus(VectorSource(df$body))
+ corpus = 
+  corpus%>%
+  tm_map(content_transformer(tolower))%>%
+  tm_map(content_transformer(FUN = function(x)gsub(pattern = 'http[[:alnum:][:punct:]]*', replacement = ' ',x = x)))%>%
+  tm_map(content_transformer(function(x)gsub(pattern = '@\\w+',replacement = ' ',x = x)))%>%
+  tm_map(content_transformer(function(x)gsub(pattern = '<.*>',replacement = ' ',x = x))) %>%
+  tm_map(content_transformer(function(x)iconv(x = x,from = "latin1", to = "ASCII", sub="")))%>%
+  tm_map(removePunctuation)%>%
+  tm_map(removeWords, stopwords('english'))
+
+
+dict = findFreqTerms(DocumentTermMatrix(Corpus(VectorSource(df$body))),lowfreq = 0)
+dict_corpus = Corpus(VectorSource(dict))
+
+corpus =
+  corpus %>%
+  tm_map(stemDocument)%>%
+  tm_map(stripWhitespace)
+
+data = unlist(corpus)
+data = as.data.frame(data)
+data <- data[1:(nrow(data)-1), ]
+data = as.data.frame(data)
+cleaned_data = cbind(data, df)
+head(cleaned_data)
+
+colnames(cleaned_data)[1] = 'cleaned_tweets'
+colnames(cleaned_data)[4] = 'original_tweets'
+str(cleaned_data)
+
+data = cleaned_data %>%
+  filter(post_date >= as.Date('2018-01-01') & post_date <= as.Date('2018-12-31'))
+
+
+write.csv(data, 'data.csv')
+
+
+```
+
+## Summary of Analysis
+
+The summary of data analysis results is described below:
+
+
+## Part 3 - Report Summarizing {.tabset}
+
+To summarize this project, we would describe:
+
+### The insights from exploring the data
+
+
+### Efforts to prepare the data
+We need to do the data wrangling, cleaning and tyding sevaral times,and the challenging aspect of stock price prediction is making use of available data to make an informed decision. A lot of data is being generated for many companies and, if these data were to be processed manually,it would be difficult to arrive at a decision in time.
+
+After we get the data, we need to perform an initial data analysis using the summary or str function. Next, we determine which variables to include in the analysis. The original dataset contains five companies, where we filtered only Apple, which we were interested in analyzing. We will also subset the dataset for the year 2018. Lastly, we need to remove English stop words, punctuation, URLs, etc., by establishing a corpus object, unlisting it, and binding it with our dataset.
+
+## Part 4 -  Recommendations
+
+
+# References
+
+[1] Anurag Nagar, Michael Hahsler, Using Text and Data Mining Techniques to extract Stock Market Sentiment from Live News Streams, IPCSIT vol. XX (2012) IACSIT Press, Singapore
+
+[2] W.B. Yu, B.R. Lea, and B. Guruswamy, A Theoretic Framework Integrating Text Mining and Energy Demand Forecasting, International Journal of Electronic Business Management. 2011, 5(3): 211-224
+
+[3] Dow Jones Industrial Average’ (2003) Essential Investment, pp. 71–72. Available at: http://search.ebscohost.com.ezproxy.cul.columbia.edu/login.aspx?direct=true&AuthType=ip&db=bth&AN=26024016&site=bsi-live (Accessed: 13 June 2021).
+
+[4] GRAHAM, B., & ZWEIG, J. (2005). The intelligent investor: a book of practical counsel. New York, Collins Business Essentials.
+
+[5] Moseki, K. K., & KS, M. R. (2017). Analysing stock market data—Market sentiment approach and its measures. Cogent Economics & Finance, 5(1) doi:http://dx.doi.org/10.1080/23322039.2017.1367147
+
+
